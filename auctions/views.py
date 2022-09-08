@@ -1,13 +1,13 @@
-from unicodedata import category
+
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
-from auctions.forms.auctions.forms import CreateListing
+from auctions.forms.auctions.forms import AddComment, CreateListing
 
-from .models import Categories, ListingItem, User, Watchlist
+from .models import Categories, Comments, ListingItem, User, Watchlist
 
 
 def index(request):
@@ -70,10 +70,18 @@ def register(request):
 def listing(request, id):
     listing_item = ListingItem.objects.get(pk = id)
     watchlist = Watchlist.objects.filter(item_name = id).exists()
-    print(watchlist)
+    comments = Comments.objects.filter(item_name = id).exists()
+    if comments != False:
+        listing_comments = Comments.objects.filter(item_name = id)
+    else:
+        listing_comments = False
+    form = AddComment()
+    print(listing_comments)
     return render(request, "auctions/listing.html", {
         'listing_item': listing_item,
-        'watchlist': watchlist
+        'watchlist': watchlist,
+        'form': form,
+        "listing_comments": listing_comments
     })
     
 def create_listing (request):
@@ -133,3 +141,12 @@ def categories_listing(request, id):
     return render(request, "auctions/category_listing.html", {
         "items": items
     })
+    
+def comment(request, id):
+    user = request.user
+    listing = get_object_or_404(ListingItem, id = id)
+    comment = request.POST.get("comment")
+    if comment == '' or not comment:
+        return redirect("listing", id)
+    Comments.objects.create(user = user, item_name = listing, up_votes = 0, comment = comment)
+    return redirect('listing', id)

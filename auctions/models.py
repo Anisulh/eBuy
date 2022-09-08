@@ -6,14 +6,10 @@ from django.db import models
 class User(AbstractUser):
     pass
 
-
 class Categories(models.Model):
     name = models.CharField(max_length=64)
-    
     def __str__(self):
         return f"{self.id}: {self.name}"
-    
-
 
 class ListingItem(models.Model):
     item_name = models.CharField(max_length=128)
@@ -23,10 +19,18 @@ class ListingItem(models.Model):
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
     sold = models.BooleanField(default=False)
     
-    
     def __str__(self):
         return f"{self.id}: name:{self.item_name} base: ${self.base_price}, lister: {self.lister}, category: {self.category}"
-
+    
+class Comments(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.TextField()
+    up_votes = models.IntegerField(blank=True)
+    item_name = models.ForeignKey(ListingItem, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f"{self.user} said: '{self.comment}' with {self.up_votes} on this item: {self.item_name}"
+    
 class Watchlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     item_name = models.ForeignKey(ListingItem, on_delete=models.CASCADE, blank=True)

@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from django.forms import ModelForm, TextInput, NumberInput, Select
-from auctions.models import Categories, ListingItem
+from auctions.models import Comments, ListingItem
 
 class CreateListing(ModelForm):
     class Meta:
@@ -18,4 +18,15 @@ class CreateListing(ModelForm):
           'base_price': NumberInput(attrs={'class': 'form-control w-75 p-3'}),
           'category': Select(attrs={'class': 'form-control w-75 p-3'}),
           'lister': Select(attrs={'class': 'form-control w-75 p-3'}),
+        }
+
+class AddComment(ModelForm):
+    class Meta:
+        model = Comments
+        exclude= ["user", "item_name", "up_votes"]
+        labels = {
+          "comment": _("Comment")
+        }
+        widgets = {
+          "comment": TextInput(attrs={'class': 'form-control w75 p-3'})
         }

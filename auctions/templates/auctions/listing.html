@@ -15,6 +15,20 @@
     </form>
     <h2>{{listing_item.item_name}}</h2>
     <p>{{listing_item.base_price}}</p>
+{% comment %} Comment section {% endcomment %}
+    <form method="POST" action="{% url 'comment' listing_item.id %}">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Post">
+    </form>
+{% if listing_comments == False%}
+    <p>No comments here.</p>
+{% else %}
+    {% for comments in listing_comments %}
+        <p>{{comments.comment}}</p>
+        <small>{{ comments.user }}</small>
+    {% endfor %}
+{% endif %}
 
     
 {% endblock %}
