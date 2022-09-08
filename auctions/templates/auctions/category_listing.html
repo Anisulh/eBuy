@@ -1,0 +1,22 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    {% if items == False %}
+    <h3>No active listings in this category</h3>
+    {% else %}
+    <ul>
+        {% for item in items %}
+            {% if not item.sold %}
+                <li>
+                    <div>
+                        <h3><a href="{% url 'listing' item.id  %}">{{item.item_name}}</a></h3>
+                        <p>Starting at: ${{item.base_price}}</p>
+                        <p>by: {{item.lister}}</p>
+                    </div>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endblock %}
