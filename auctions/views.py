@@ -5,9 +5,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
-from auctions.forms.auctions.forms import AddComment, CreateListing
+from auctions.forms.auctions.forms import AddBid, AddComment, CreateListing
 
-from .models import Categories, Comments, ListingItem, User, Watchlist
+from .models import Bid, Categories, Comments, ListingItem, User, Watchlist
 
 
 def index(request):
@@ -71,17 +71,26 @@ def listing(request, id):
     listing_item = ListingItem.objects.get(pk = id)
     watchlist = Watchlist.objects.filter(item_name = id).exists()
     comments = Comments.objects.filter(item_name = id).exists()
+    bid_exists = Bid.objects.filter(listing_item = id).exists()
     if comments != False:
         listing_comments = Comments.objects.filter(item_name = id)
     else:
         listing_comments = False
+    if bid_exists != False:
+        bid_list = Bid.objects.filter(listing_item = id).order_by('-bidding_price')
+        current_highest_bid = bid_list[0].bidding_price
+    else:
+        current_highest_bid = False
     form = AddComment()
+    bidding_form = AddBid()
     print(listing_comments)
     return render(request, "auctions/listing.html", {
         'listing_item': listing_item,
         'watchlist': watchlist,
+        'bidding_form': bidding_form,
         'form': form,
-        "listing_comments": listing_comments
+        "listing_comments": listing_comments,
+        'current_highest_bid': current_highest_bid
     })
     
 def create_listing (request):
@@ -150,3 +159,20 @@ def comment(request, id):
         return redirect("listing", id)
     Comments.objects.create(user = user, item_name = listing, up_votes = 0, comment = comment)
     return redirect('listing', id)
+
+def bid(request, id):
+    user = request.user
+    listing = get_object_or_404(ListingItem, id = id)
+    bid = int(request.POST.get("bidding_price"))
+    bid_exists = Bid.objects.filter(listing_item = listing).exists()
+    if bid_exists == False:
+        if bid <= listing.base_price:
+            return redirect("listing", id)
+        Bid.objects.create(bidder = user, listing_item = listing, bidding_price = bid)
+    else:
+        bid_list = Bid.objects.filter(listing_item = id).order_by('-bidding_price')
+        current_highest_bid = bid_list[0].bidding_price
+        if bid <= current_highest_bid:
+            return redirect("listing", id)
+        Bid.objects.create(bidder = user, listing_item = listing, bidding_price = bid)
+    return redirect("listing", id)

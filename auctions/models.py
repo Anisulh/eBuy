@@ -33,13 +33,13 @@ class Comments(models.Model):
     
 class Watchlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    item_name = models.ForeignKey(ListingItem, on_delete=models.CASCADE, blank=True)
+    item_name = models.ForeignKey(ListingItem, on_delete=models.CASCADE)
     
     def __str__(self):
         return f"{self.user} is watching {self.item_name}"
 
 class Bid(models.Model):
-    listing_item = models.ManyToManyField(ListingItem, blank=True, related_name="bids")
+    listing_item = models.ForeignKey(ListingItem, on_delete=models.CASCADE)
     bidder = models.ForeignKey(User, on_delete=models.CASCADE)
     bidding_price = models.IntegerField()
     

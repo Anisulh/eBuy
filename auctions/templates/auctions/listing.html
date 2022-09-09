@@ -15,6 +15,16 @@
     </form>
     <h2>{{listing_item.item_name}}</h2>
     <p>{{listing_item.base_price}}</p>
+    {% if current_highest_bid == False %}
+        <p>No bids placed </p>
+    {% else %}
+        <p>${{current_highest_bid}}</p>
+    {% endif %}    
+    <form method="POST" action="{% url 'bid' listing_item.id %}">
+        {% csrf_token %}
+        {{bidding_form}}
+        <input type="submit" value="Place Bid">
+    </form>
 {% comment %} Comment section {% endcomment %}
     <form method="POST" action="{% url 'comment' listing_item.id %}">
         {% csrf_token %}
