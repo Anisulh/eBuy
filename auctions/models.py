@@ -1,4 +1,4 @@
-from tkinter import CASCADE
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -17,6 +17,7 @@ class ListingItem(models.Model):
     base_price = models.IntegerField()
     lister = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    images = models.ImageField(upload_to='listing_image')
     sold = models.BooleanField(default=False)
     
     def __str__(self):

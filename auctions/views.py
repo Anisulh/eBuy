@@ -97,8 +97,9 @@ def create_listing (request):
     if request.method == "POST":
         form = CreateListing(request.POST)
         if form.is_valid():
-            if request.user.is_authenticated:
-                form.save()
+                instance = form.save(commit=False)
+                instance.lister = request.user
+                instance.save()
                 return redirect(index)
     form = CreateListing()      
     return render(request, "auctions/create_listing.html", {
