@@ -14,22 +14,34 @@
 {% endif %}
     </form>
     <h2>{{listing_item.item_name}}</h2>
-    <p>{{listing_item.base_price}}</p>
+    <div>
+        <img src='{{listing_item.images.url}}' width = '200px'/>
+        <div>
+            <p>Place a bid:</p>
+            <p>Time Left: {{listing_item.auction_time_limit}}</p>
+            <p>Starting at: {{listing_item.base_auction_price}}</p>
+        </div>
+        <div>
+            <p>Or, buy straight</p>
+            <p>{{listing_item.selling_price}}</p>
+            <button class='btn btn-primary'>Buy</button>
+        </div>
+    </div>
     {% if current_highest_bid == False %}
         <p>No bids placed </p>
     {% else %}
-        <p>${{current_highest_bid}}</p>
+        <p>Current Highest Bid: ${{current_highest_bid}}</p>
     {% endif %}    
     <form method="POST" action="{% url 'bid' listing_item.id %}">
         {% csrf_token %}
         {{bidding_form}}
-        <input type="submit" value="Place Bid">
+        <input type="submit" value="Place Bid" class='btn btn-primary'>
     </form>
 {% comment %} Comment section {% endcomment %}
     <form method="POST" action="{% url 'comment' listing_item.id %}">
         {% csrf_token %}
         {{form}}
-        <input type="submit" value="Post">
+        <input type="submit" value="Post" class='btn btn-primary'>
     </form>
 {% if listing_comments == False%}
     <p>No comments here.</p>

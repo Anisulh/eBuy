@@ -1,5 +1,6 @@
 from django.urls import path
 
+
 from . import views
 
 urlpatterns = [
@@ -18,3 +19,5 @@ urlpatterns = [
     path("comment/<int:id>", views.comment, name="comment"),
     path("bid/<int:id>", views.bid, name="bid")
 ]
+
+

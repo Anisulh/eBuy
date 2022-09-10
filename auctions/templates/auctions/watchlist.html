@@ -6,9 +6,9 @@
     {% if not watchlist %}
     <h2>Watchlist</h2>
     {% else %}
-    <ul>
+    <ul class='list-group list-group-flush'>
         {% for item in watchlist %}
-                <li>
+                <li class="list-group-item">
                     <div>
                         <h3><a href="{% url 'listing' item.item_name.id  %}">{{item.item_name.item_name}}</a></h3>
                     </div>

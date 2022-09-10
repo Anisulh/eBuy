@@ -1,9 +1,12 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    {% for item in listing_items %}
-    <p> <a href="{% url 'listing' item.id %}">{{item.item_name}}</a></p>
-    {% endfor %}
+    <h2>Your Current Listings:</h2>
+    <ul class='list-group list-group-flush'>
+        {% for item in listing_items %}
+        <li class="list-group-item"> <a href="{% url 'listing' item.id %}">{{item.item_name}}</a></li>
+        {% endfor %}
+    </ul>
 
     
 {% endblock %}

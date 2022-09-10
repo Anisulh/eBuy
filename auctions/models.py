@@ -14,14 +14,16 @@ class Categories(models.Model):
 class ListingItem(models.Model):
     item_name = models.CharField(max_length=128)
     description = models.TextField(default="")
-    base_price = models.IntegerField()
+    base_auction_price = models.IntegerField(blank=True)
+    auction_time_limit= models.DurationField(blank=True)
+    selling_price = models.IntegerField(blank=True)
     lister = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
-    images = models.ImageField(upload_to='listing_image')
+    images = models.ImageField(upload_to='listing_image/')
     sold = models.BooleanField(default=False)
     
     def __str__(self):
-        return f"{self.id}: name:{self.item_name} base: ${self.base_price}, lister: {self.lister}, category: {self.category}"
+        return f"{self.id}: name:{self.item_name} base: ${self.base_auction_price}, lister: {self.lister}, category: {self.category}"
     
 class Comments(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -47,3 +49,11 @@ class Bid(models.Model):
     def __str__(self):
         return f"{self.id}: item:{self.listing_item}, bidder:{self.bidder}, bidding price:{self.bidding_price} category"
 
+# class Profile(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     street_address = models.TextField()
+#     street_address2: models.TextField(blank=True)
+#     city = models.TextField()
+#     state = models.TextField()
+#     zipcode = models.IntegerField(max_length=10)
+    

@@ -83,7 +83,6 @@ def listing(request, id):
         current_highest_bid = False
     form = AddComment()
     bidding_form = AddBid()
-    print(listing_comments)
     return render(request, "auctions/listing.html", {
         'listing_item': listing_item,
         'watchlist': watchlist,
@@ -119,7 +118,6 @@ def watchlist(request):
         watchlist = Watchlist.objects.filter(user = user.id)
     else:
         watchlist = False
-    print(watchlist)
     return render(request, "auctions/watchlist.html", {"watchlist": watchlist})
 
 def add_watchlist(request, id):
@@ -167,7 +165,7 @@ def bid(request, id):
     bid = int(request.POST.get("bidding_price"))
     bid_exists = Bid.objects.filter(listing_item = listing).exists()
     if bid_exists == False:
-        if bid <= listing.base_price:
+        if bid <= listing.base_auction_price:
             return redirect("listing", id)
         Bid.objects.create(bidder = user, listing_item = listing, bidding_price = bid)
     else:

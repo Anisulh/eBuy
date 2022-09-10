@@ -3,13 +3,13 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-    <ul>
+    <ul class='list-group list-group-flush'>
         {% for listing in listings %}
             {% if not listing.sold %}
-                <li>
+                <li class="list-group-item">
                     <div>
                         <h3><a href="listing/{{listing.id}}">{{listing.item_name}}</a></h3>
-                        <p>Starting at: ${{listing.base_price}}</p>
+                        <p>Starting at: ${{listing.base_auction_price}}</p>
                         <p>by: {{listing.lister}}</p>
                     </div>
                 </li>

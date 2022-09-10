@@ -10,14 +10,17 @@ class CreateListing(ModelForm):
         labels = {
           'item_name': _('Item Name'),
           'description': _('Description'),
-          'base_price': _('Starting Price'),
+          'base_auction_price': _('Starting Bid Price'),
+          'auction_time_limit': _('How long should the auction run for?'),
+          'selling_price': _('Selling Price'),
           'category': _('Category'),
           'images': _('Upload Images')
         }
         widgets = {
           'item_name': TextInput(attrs={'class': 'form-control w-75 p-3'}),
           'description': TextInput(attrs={'class': 'form-control w-75 p-3'}),
-          'base_price': NumberInput(attrs={'class': 'form-control w-75 p-3'}),
+          'base_auction_price': NumberInput(attrs={'class': 'form-control w-75 p-3'}),
+          'selling_price': NumberInput(attrs={'class': 'form-control w-75 p-3'}),
           'category': Select(attrs={'class': 'form-select w-75'}),
           
         }
